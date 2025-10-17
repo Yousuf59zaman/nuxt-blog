@@ -1,0 +1,38 @@
+[
+  {
+    "id": "author-001",
+    "name": "Ava Chen",
+    "role": "Lead Frontend Engineer",
+    "bio": "Ava builds performance-centric web platforms and mentors teams adopting Nuxt across large design systems.",
+    "avatar": "/images/authors/ava-chen.jpg",
+    "links": {
+      "email": "ava.chen@example.com",
+      "linkedin": "https://www.linkedin.com/in/avachen",
+      "github": "https://github.com/avachen"
+    }
+  },
+  {
+    "id": "author-002",
+    "name": "Matteo Ruiz",
+    "role": "Design Systems Lead",
+    "bio": "Matteo translates complex product requirements into scalable UI kits with Tailwind, PrimeVue, and thoughtful documentation.",
+    "avatar": "/images/authors/matteo-ruiz.jpg",
+    "links": {
+      "email": "matteo.ruiz@example.com",
+      "linkedin": "https://www.linkedin.com/in/matteoruiz",
+      "github": "https://github.com/matteoruiz"
+    }
+  },
+  {
+    "id": "author-003",
+    "name": "Priya Desai",
+    "role": "Content Strategist",
+    "bio": "Priya focuses on structured storytelling, enabling engineering and editorial teams to collaborate in Git-based workflows.",
+    "avatar": "/images/authors/priya-desai.jpg",
+    "links": {
+      "email": "priya.desai@example.com",
+      "linkedin": "https://www.linkedin.com/in/priyadesai",
+      "github": "https://github.com/priyadesai"
+    }
+  }
+]
