@@ -17,9 +17,6 @@ const { searchResults, search, clearSearch, resultCount } = useSearch(blogPosts)
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
               Search Blog Posts
             </h1>
-            <p class="text-lg text-indigo-100">
-              Powered by Fuse.js fuzzy search - Try searching for "nuxt", "design", or "typescript"
-            </p>
           </div>
 
           <div class="relative">
@@ -106,34 +103,6 @@ const { searchResults, search, clearSearch, resultCount } = useSearch(blogPosts)
           </svg>
           <h3 class="text-xl font-semibold text-gray-900 mb-2">No results found</h3>
           <p class="text-gray-600">Try adjusting your search terms</p>
-        </div>
-      </section>
-
-      <!-- Info Section -->
-      <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white rounded-xl shadow-lg p-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">About Fuse.js Search</h2>
-          <div class="prose prose-indigo max-w-none">
-            <p class="text-gray-600 mb-4">
-              This demo showcases <strong>Fuse.js</strong> - a powerful, lightweight fuzzy-search library that works entirely client-side.
-            </p>
-
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Features:</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
-              <li><strong>Fuzzy Matching:</strong> Finds results even with typos or partial matches</li>
-              <li><strong>Weighted Search:</strong> Title searches are prioritized over other fields</li>
-              <li><strong>Fast & Lightweight:</strong> No server needed - works entirely in browser</li>
-              <li><strong>Configurable:</strong> Adjust threshold, weights, and search keys</li>
-            </ul>
-
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Try These Searches:</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>"vue" - Matches "Vue 3 Composition API", "PrimeVue Components", etc.</li>
-              <li>"design" - Finds all design-related posts</li>
-              <li>"typscript" (with typo) - Still finds "TypeScript" posts</li>
-              <li>"web dev" - Matches "Web Development" posts</li>
-            </ul>
-          </div>
         </div>
       </section>
     </main>
