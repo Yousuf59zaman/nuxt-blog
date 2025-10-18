@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { blogPosts } from '../data/posts'
+import { blogPosts, type Author } from '../data/posts'
 import { useSearch } from '../composables/useSearch'
+
+definePageMeta({
+  layout: 'default'
+})
 
 // Initialize search
 const { searchResults, search, resultCount } = useSearch(blogPosts)
@@ -17,6 +21,10 @@ const categories = computed(() => {
 const currentPage = ref(1)
 const postsPerPage = 6
 
+// Author Modal
+const showAuthorModal = ref(false)
+const selectedAuthor = ref<Author | null>(null)
+
 // Combined filtering (search + category)
 const filteredPosts = computed(() => {
   let posts = searchResults.value
@@ -24,7 +32,7 @@ const filteredPosts = computed(() => {
   if (selectedCategory.value !== 'All') {
     posts = posts.filter(post => post.category === selectedCategory.value)
   }
- 
+
   return posts
 })
 
@@ -54,6 +62,14 @@ const selectCategory = (category: string) => {
 const goToPage = (page: number) => {
   currentPage.value = page
   window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// Handle author click
+const openAuthorModal = (author: Author, event: Event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  selectedAuthor.value = author
+  showAuthorModal.value = true
 }
 </script>
 
@@ -151,7 +167,12 @@ const goToPage = (page: number) => {
                   class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                  <p class="text-sm font-semibold text-gray-900">{{ post.author.name }}</p>
+                  <button
+                    @click="(e) => openAuthorModal(post.author, e)"
+                    class="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                  >
+                    {{ post.author.name }}
+                  </button>
                   <p class="text-xs text-gray-500">{{ post.publishDate }} | {{ post.readTime }}</p>
                 </div>
               </div>
@@ -225,6 +246,13 @@ const goToPage = (page: number) => {
         </div>
       </section>
     </main>
+
+    <!-- Author Modal -->
+    <AuthorModal
+      v-if="selectedAuthor"
+      :author="selectedAuthor"
+      v-model:visible="showAuthorModal"
+    />
   </div>
 </template>
 

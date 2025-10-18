@@ -4,6 +4,7 @@ export interface Author {
   photo: string
   bio: string
   email?: string
+  expertise?: string[]
   social?: {
     twitter?: string
     github?: string
@@ -32,6 +33,7 @@ export const authors: Author[] = [
     photo: 'https://i.pravatar.cc/150?img=12',
     bio: 'Full-stack developer passionate about Vue.js and modern web technologies. 5+ years of experience building scalable applications.',
     email: 'john@example.com',
+    expertise: ['Nuxt.js', 'Vue.js', 'TypeScript', 'Design Systems'],
     social: {
       twitter: '@johndoe',
       github: 'johndoe',
@@ -44,6 +46,7 @@ export const authors: Author[] = [
     photo: 'https://i.pravatar.cc/150?img=45',
     bio: 'UI/UX designer and frontend developer. Love creating beautiful and intuitive user experiences.',
     email: 'jane@example.com',
+    expertise: ['Product Design', 'UX Research', 'Design Systems'],
     social: {
       twitter: '@janesmith',
       github: 'janesmith'
@@ -55,6 +58,7 @@ export const authors: Author[] = [
     photo: 'https://i.pravatar.cc/150?img=33',
     bio: 'DevOps engineer and cloud architecture enthusiast. Specializing in AWS and Kubernetes.',
     email: 'mike@example.com',
+    expertise: ['Kubernetes', 'AWS', 'Automation'],
     social: {
       github: 'mikejohnson',
       linkedin: 'mikejohnson'
