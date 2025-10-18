@@ -135,11 +135,11 @@
     <!-- Mobile Search (Expandable) -->
     <div v-if="showSearch" class="md:hidden px-4 pb-4 bg-white border-t">
       <div class="relative">
-        <input
+        <InputText
           v-model="searchQuery"
           type="text"
           placeholder="Search blog posts..."
-          class="w-full px-4 py-2 pl-10 pr-4 text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          class="w-full !px-4 !py-2 !pl-10 !pr-4"
           @keyup.enter="handleSearch"
         />
         <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -204,6 +204,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { blogPosts } from '../data/posts'
+import InputText from 'primevue/inputtext'
 
 const router = useRouter()
 

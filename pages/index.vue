@@ -2,6 +2,9 @@
 import { ref, computed } from 'vue'
 import { blogPosts, type Author } from '../data/posts'
 import { useSearch } from '../composables/useSearch'
+import Card from 'primevue/card'
+import Tag from 'primevue/tag'
+import InputText from 'primevue/inputtext'
 
 definePageMeta({
   layout: 'default'
@@ -88,11 +91,11 @@ const openAuthorModal = (author: Author, event: Event) => {
 
           <!-- Search Bar -->
           <div class="relative mb-6">
-            <input
+            <InputText
               type="text"
               @input="handleSearch"
               placeholder="Search blog posts by title, excerpt, or tags..."
-              class="w-full px-4 py-3 pl-12 text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent shadow-lg transition-all duration-200"
+              class="w-full !px-4 !py-3 !pl-12 !text-gray-900 !bg-white/95 !rounded-2xl !shadow-xl !border-none focus:!ring-4 focus:!ring-white/70 focus:!shadow-2xl focus:!outline-none placeholder:text-gray-400"
             />
             <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,67 +131,72 @@ const openAuthorModal = (author: Author, event: Event) => {
       <!-- Blog Posts Grid -->
       <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div v-if="paginatedPosts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <NuxtLink
+          <Card
             v-for="post in paginatedPosts"
             :key="post.id"
-            :to="`/blog/${post.slug}`"
-            class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+            class="group transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+            :pt="{
+              root: { class: 'shadow-lg overflow-hidden rounded-3xl border border-white/80 bg-white transition-shadow duration-300 hover:shadow-2xl' },
+              body: { class: 'p-0' },
+              content: { class: 'p-0' }
+            }"
           >
-            <!-- Thumbnail -->
-            <div class="relative h-48 overflow-hidden bg-gray-200">
-              <img
-                :src="post.thumbnail"
-                :alt="post.title"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div class="absolute top-4 right-4">
-                <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg">
-                  {{ post.category }}
-                </span>
-              </div>
-            </div>
-
-            <!-- Content -->
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors">
-                {{ post.title }}
-              </h3>
-
-              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                {{ post.excerpt }}
-              </p>
-
-              <!-- Author Info -->
-              <div class="flex items-center mb-4">
+            <template #header>
+              <NuxtLink :to="`/blog/${post.slug}`" class="block relative h-48 overflow-hidden bg-gray-200">
                 <img
-                  :src="post.author.photo"
-                  :alt="post.author.name"
-                  class="w-10 h-10 rounded-full mr-3"
+                  :src="post.thumbnail"
+                  :alt="post.title"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
                 />
-                <div>
-                  <button
-                    @click="(e) => openAuthorModal(post.author, e)"
-                    class="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                  >
-                    {{ post.author.name }}
-                  </button>
-                  <p class="text-xs text-gray-500">{{ post.publishDate }} | {{ post.readTime }}</p>
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/0 to-gray-900/20"></div>
+                <div class="absolute top-4 left-4">
+                  <Tag :value="post.category" severity="info" class="!bg-white/90 !text-indigo-600 !font-semibold !rounded-full !px-4 !py-2 shadow-lg backdrop-blur-sm" />
                 </div>
-              </div>
+              </NuxtLink>
+            </template>
 
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="tag in post.tags.slice(0, 3)"
-                  :key="tag"
-                  class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-            </div>
-          </NuxtLink>
+            <template #content>
+              <NuxtLink :to="`/blog/${post.slug}`" class="block p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors">
+                  {{ post.title }}
+                </h3>
+
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                  {{ post.excerpt }}
+                </p>
+
+                <!-- Author Info -->
+                <div class="flex items-center mb-4">
+                  <img
+                    :src="post.author.photo"
+                    :alt="post.author.name"
+                    class="w-10 h-10 rounded-full mr-3"
+                  />
+                  <div>
+                    <button
+                      @click="(e) => openAuthorModal(post.author, e)"
+                      class="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                    >
+                      {{ post.author.name }}
+                    </button>
+                    <p class="text-xs text-gray-500">{{ post.publishDate }} | {{ post.readTime }}</p>
+                  </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2">
+                  <Tag
+                    v-for="tag in post.tags.slice(0, 3)"
+                    :key="tag"
+                    :value="tag"
+                    severity="secondary"
+                    class="!bg-gray-100 !text-gray-700 !text-xs"
+                  />
+                </div>
+              </NuxtLink>
+            </template>
+          </Card>
         </div>
 
         <!-- No Results -->

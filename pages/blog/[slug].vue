@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { blogPosts } from '../../data/posts'
 import { useRoute, useRouter } from 'vue-router'
+import Tag from 'primevue/tag'
+import Card from 'primevue/card'
 
 const route = useRoute()
 const router = useRouter()
@@ -51,11 +53,14 @@ if (!currentPost.value) {
 
         <!-- Category Badge -->
         <div class="mb-4">
-          <NuxtLink
-            :to="`/category/${encodeURIComponent(currentPost.category)}`"
-            class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-semibold hover:bg-white/30 transition-colors"
-          >
-            {{ currentPost.category }}
+          <NuxtLink :to="`/category/${encodeURIComponent(currentPost.category)}`">
+            <Tag
+              :value="currentPost.category"
+              severity="info"
+              class="!bg-white/20 backdrop-blur-sm !text-white !rounded-full
+                    !px-4 !py-2 !text-base !font-semibold leading-none
+                    hover:!bg-white/30 transition-colors cursor-pointer"
+            />
           </NuxtLink>
         </div>
 
@@ -104,18 +109,17 @@ if (!currentPost.value) {
           class="prose prose-lg prose-indigo max-w-none"
           v-html="currentPost.content"
         ></div>
-
         <!-- Tags -->
         <div class="mt-8 pt-8 border-t border-gray-200">
           <h3 class="text-sm font-semibold text-gray-900 mb-3">Tags</h3>
           <div class="flex flex-wrap gap-2">
-            <span
+            <Tag
               v-for="tag in currentPost.tags"
               :key="tag"
-              class="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full hover:bg-indigo-200 transition-colors"
-            >
-              {{ tag }}
-            </span>
+              :value="tag"
+              severity="info"
+              class="!bg-indigo-100 !text-indigo-700 !text-sm !px-4 !py-2 !rounded-full hover:!bg-indigo-200 transition-colors"
+            />
           </div>
         </div>
       </div>
@@ -172,30 +176,39 @@ if (!currentPost.value) {
       </div>
 
       <!-- Related Posts -->
-      <div v-if="relatedPosts.length > 0" class="mt-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">Related Posts</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <NuxtLink
-            v-for="post in relatedPosts"
-            :key="post.id"
-            :to="`/blog/${post.slug}`"
-            class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
-          >
-            <div class="relative h-40 overflow-hidden bg-gray-200">
-              <img
-                :src="post.thumbnail"
-                :alt="post.title"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div class="p-4">
-              <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors">
-                {{ post.title }}
-              </h3>
-              <p class="text-sm text-gray-500">{{ post.readTime }}</p>
-            </div>
-          </NuxtLink>
+        <div v-if="relatedPosts.length > 0" class="mt-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">Related Posts</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card
+              v-for="post in relatedPosts"
+              :key="post.id"
+              class="group transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              :pt="{
+                root: { class: 'shadow-lg overflow-hidden rounded-3xl border border-white/80 bg-white transition-shadow duration-300 hover:shadow-2xl' },
+                body: { class: 'p-0' },
+                content: { class: 'p-0' }
+              }"
+            >
+              <template #header>
+                <NuxtLink :to="`/blog/${post.slug}`" class="block relative h-40 overflow-hidden bg-gray-200">
+                  <img
+                    :src="post.thumbnail"
+                    :alt="post.title"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                </NuxtLink>
+              </template>
+              <template #content>
+                <NuxtLink :to="`/blog/${post.slug}`" class="block p-4">
+                  <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors">
+                  {{ post.title }}
+                </h3>
+                <p class="text-sm text-gray-500">{{ post.readTime }}</p>
+              </NuxtLink>
+            </template>
+          </Card>
         </div>
       </div>
     </article>

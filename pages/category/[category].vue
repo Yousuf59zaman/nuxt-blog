@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { blogPosts } from '../../data/posts'
 import { useRoute } from 'vue-router'
 import { useHead } from 'nuxt/app'
+import Card from 'primevue/card'
+import Tag from 'primevue/tag'
 
 const route = useRoute()
 const allCategories = computed(() =>
@@ -62,64 +64,83 @@ useHead(() => ({
           v-for="category in allCategories"
           :key="category"
           :to="`/category/${encodeURIComponent(category)}`"
-          :class="[
-            'px-4 py-2 rounded-full font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105',
-            resolvedCategory === category
-              ? 'bg-indigo-600 text-white'
-              : 'bg-white text-indigo-600 hover:bg-indigo-50'
-          ]"
         >
-          {{ category }}
+          <Tag
+            :value="category"
+            :severity="resolvedCategory === category ? 'info' : 'secondary'"
+            :class="[
+              'transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer !rounded-full !px-5 !py-2 !text-sm border',
+              resolvedCategory === category
+                ? '!bg-indigo-600 !text-white !border-transparent'
+                : '!bg-white !text-indigo-600 hover:!bg-indigo-50 !border-indigo-100'
+            ]"
+          />
         </NuxtLink>
       </div>
 
       <div v-if="categoryPosts.length" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <NuxtLink
+        <Card
           v-for="post in categoryPosts"
           :key="post.id"
-          :to="`/blog/${post.slug}`"
-          class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+          class="group transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+          :pt="{
+            root: { class: 'shadow-lg overflow-hidden rounded-3xl border border-white/80 bg-white transition-shadow duration-300 hover:shadow-2xl' },
+            body: { class: 'p-0' },
+            content: { class: 'p-0' }
+          }"
         >
-          <div class="grid grid-cols-1 sm:grid-cols-[200px_1fr]">
-            <div class="relative h-48 sm:h-full overflow-hidden bg-gray-200">
-              <img
-                :src="post.thumbnail"
-                :alt="post.title"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div class="p-6 flex flex-col justify-between">
-              <div>
-                <span class="inline-flex items-center px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-4">
-                  {{ post.category }}
-                </span>
-                <h2 class="text-2xl font-bold text-gray-900 mb-3 leading-tight hover:text-indigo-600 transition-colors">
-                  {{ post.title }}
-                </h2>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {{ post.excerpt }}
-                </p>
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
+          <template #content>
+            <NuxtLink :to="`/blog/${post.slug}`" class="block group">
+              <div class="grid grid-cols-1 sm:grid-cols-[220px_1fr]">
+                <div class="relative h-48 sm:h-full overflow-hidden bg-gray-200">
                   <img
-                    :src="post.author.photo"
-                    :alt="post.author.name"
-                    class="w-10 h-10 rounded-full mr-3"
+                    :src="post.thumbnail"
+                    :alt="post.title"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
-                  <div>
-                    <p class="text-sm font-semibold text-gray-900">{{ post.author.name }}</p>
-                    <p class="text-xs text-gray-500">{{ post.publishDate }} | {{ post.readTime }}</p>
+                  <div class="absolute inset-0 bg-gradient-to-tr from-gray-900/60 via-gray-900/10 to-transparent"></div>
+                  <div class="absolute bottom-4 left-4 flex items-center gap-2">
+                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/90 text-indigo-600 font-semibold shadow-lg backdrop-blur-sm">
+                      {{ post.category.charAt(0) }}
+                    </span>
+                    <span class="text-sm font-medium text-white drop-shadow">Featured in {{ post.category }}</span>
                   </div>
                 </div>
-                <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider">
-                  Read More
-                </span>
+                <div class="p-6 flex flex-col justify-between">
+                  <div>
+                    <Tag :value="post.category" severity="info" class="!bg-indigo-100 !text-indigo-700 !text-xs !font-semibold !rounded-full !px-3 !py-1 mb-4" />
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-indigo-600 transition-colors">
+                      {{ post.title }}
+                    </h2>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                      {{ post.excerpt }}
+                    </p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <img
+                        :src="post.author.photo"
+                        :alt="post.author.name"
+                        class="w-10 h-10 rounded-full mr-3"
+                      />
+                      <div>
+                        <p class="text-sm font-semibold text-gray-900">{{ post.author.name }}</p>
+                        <p class="text-xs text-gray-500">{{ post.publishDate }} | {{ post.readTime }}</p>
+                      </div>
+                    </div>
+                    <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider flex items-center gap-1">
+                      Read More
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </NuxtLink>
+            </NuxtLink>
+          </template>
+        </Card>
       </div>
 
       <div v-else class="text-center py-20 bg-white rounded-2xl shadow-lg">
